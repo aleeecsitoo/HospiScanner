@@ -11,7 +11,9 @@ data class ScanResult(
     val isValidJson: Boolean,
     val jsonData: Map<String, Any>? = null,
     val formattedJson: String? = null,
-    val errorMessage: String? = null
+    val errorMessage: String? = null,
+    val dni: String? = null,
+    val requiresPinVerification: Boolean = false
 )
 
 /**
@@ -35,11 +37,17 @@ object QRDataParser {
                     .replace("{", "{\n  ")
                     .replace("}", "\n}")
                 
+                // Extract DNI field (try different possible field names)
+                val dni = extractDNI(jsonMap)
+                val requiresPinVerification = dni != null && dni.length >= 6
+                
                 ScanResult(
                     rawData = rawData,
                     isValidJson = true,
                     jsonData = jsonMap,
-                    formattedJson = formattedJson
+                    formattedJson = formattedJson,
+                    dni = dni,
+                    requiresPinVerification = requiresPinVerification
                 )
             } else {
                 ScanResult(
@@ -63,5 +71,32 @@ object QRDataParser {
                 errorMessage = "Error parsing data: ${e.message}"
             )
         }
+    }
+    
+    /**
+     * Extract DNI from JSON data - try different field name variations
+     */
+    private fun extractDNI(jsonMap: Map<String, Any>): String? {
+        // Try different possible field names for DNI
+        val possibleKeys = listOf("DNI", "dni", "Dni", "document_id", "documentId")
+        
+        for (key in possibleKeys) {
+            val value = jsonMap[key]
+            if (value != null) {
+                return value.toString()
+            }
+        }
+        
+        return null
+    }
+    
+    /**
+     * Extract the first 6 digits from DNI for PIN verification
+     */
+    fun extractPinFromDNI(dni: String): String {
+        // Extract only digits from the DNI
+        val digits = dni.filter { it.isDigit() }
+        // Return first 6 digits
+        return digits.take(6)
     }
 }

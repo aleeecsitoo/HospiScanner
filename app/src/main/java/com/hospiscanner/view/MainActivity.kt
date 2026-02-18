@@ -11,10 +11,12 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
+import com.google.android.material.textfield.TextInputEditText
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage
@@ -62,6 +64,12 @@ class MainActivity : AppCompatActivity() {
         viewModel.scanResult.observe(this) { result ->
             result?.let {
                 showResult(it)
+            }
+        }
+        
+        viewModel.pendingScanResult.observe(this) { result ->
+            result?.let {
+                showPinDialog(it)
             }
         }
         
@@ -271,6 +279,51 @@ class MainActivity : AppCompatActivity() {
         clipboard.setPrimaryClip(clip)
         
         Toast.makeText(this, getString(R.string.copied), Toast.LENGTH_SHORT).show()
+    }
+    
+    private fun showPinDialog(result: com.hospiscanner.model.ScanResult) {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_pin_verification, null)
+        val pinInput = dialogView.findViewById<TextInputEditText>(R.id.pinInput)
+        val errorText = dialogView.findViewById<android.widget.TextView>(R.id.errorText)
+        
+        val dialog = AlertDialog.Builder(this)
+            .setView(dialogView)
+            .setCancelable(false)
+            .create()
+        
+        dialogView.findViewById<View>(R.id.confirmButton).setOnClickListener {
+            val enteredPin = pinInput.text.toString()
+            
+            when {
+                enteredPin.length != 6 -> {
+                    errorText.text = getString(R.string.pin_error_length)
+                    errorText.visibility = View.VISIBLE
+                }
+                result.dni == null -> {
+                    errorText.text = getString(R.string.pin_error_no_dni)
+                    errorText.visibility = View.VISIBLE
+                }
+                result.dni.filter { it.isDigit() }.length < 6 -> {
+                    errorText.text = getString(R.string.pin_error_dni_short)
+                    errorText.visibility = View.VISIBLE
+                }
+                viewModel.verifyPin(enteredPin) -> {
+                    dialog.dismiss()
+                }
+                else -> {
+                    errorText.text = getString(R.string.pin_error_incorrect)
+                    errorText.visibility = View.VISIBLE
+                    pinInput.text?.clear()
+                }
+            }
+        }
+        
+        dialogView.findViewById<View>(R.id.cancelButton).setOnClickListener {
+            dialog.dismiss()
+            viewModel.cancelPinVerification()
+        }
+        
+        dialog.show()
     }
     
     override fun onDestroy() {

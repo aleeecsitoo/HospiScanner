@@ -224,7 +224,7 @@ class MainActivity : AppCompatActivity() {
             binding.statusIndicator.setBackgroundColor(
                 ContextCompat.getColor(this, R.color.success)
             )
-            binding.statusIndicatorText.text = "Valid JSON ✓"
+            binding.statusIndicatorText.text = getString(R.string.valid_json)
             binding.jsonCard.visibility = View.VISIBLE
             binding.jsonDataText.text = result.formattedJson
             binding.errorCard.visibility = View.GONE
@@ -232,7 +232,7 @@ class MainActivity : AppCompatActivity() {
             binding.statusIndicator.setBackgroundColor(
                 ContextCompat.getColor(this, R.color.error)
             )
-            binding.statusIndicatorText.text = "Invalid JSON ✗"
+            binding.statusIndicatorText.text = getString(R.string.invalid_json_x)
             binding.jsonCard.visibility = View.GONE
             binding.errorCard.visibility = View.VISIBLE
             binding.errorText.text = result.errorMessage ?: getString(R.string.invalid_json)

@@ -181,7 +181,6 @@
                     style="@style/BodyText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Valid JSON"
                     android:textColor="@color/text_white"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -249,7 +248,7 @@
                         android:layout_marginTop="8dp"
                         android:fontFamily="monospace"
                         android:textIsSelectable="true"
-                        tools:text="{\n  \"key\": \"value\"\n}" />
+                        tools:text='{"key": "value"}' />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -273,7 +272,7 @@
                         style="@style/SubtitleText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Error"
+                        android:text="@string/error_processing"
                         android:textColor="@color/error"
                         android:textStyle="bold" />
 

@@ -39,7 +39,7 @@ object QRDataParser {
                 
                 // Extract DNI field (try different possible field names)
                 val dni = extractDNI(jsonMap)
-                val requiresPinVerification = dni != null && dni.length >= 6
+                val requiresPinVerification = dni != null && dni.filter { it.isDigit() }.length >= 6
                 
                 ScanResult(
                     rawData = rawData,

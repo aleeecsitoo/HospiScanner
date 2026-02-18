@@ -303,10 +303,6 @@ class MainActivity : AppCompatActivity() {
                     errorText.text = getString(R.string.pin_error_no_dni)
                     errorText.visibility = View.VISIBLE
                 }
-                result.dni.filter { it.isDigit() }.length < 6 -> {
-                    errorText.text = getString(R.string.pin_error_dni_short)
-                    errorText.visibility = View.VISIBLE
-                }
                 viewModel.verifyPin(enteredPin) -> {
                     dialog.dismiss()
                 }

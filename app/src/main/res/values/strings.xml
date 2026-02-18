@@ -25,4 +25,15 @@
     <string name="error_camera_init">Failed to initialize camera</string>
     <string name="error_scanning">Error during scanning</string>
     <string name="error_processing">Error processing QR code</string>
+    
+    <!-- PIN Verification -->
+    <string name="pin_verification_title">Verificación PIN</string>
+    <string name="pin_verification_message">Ingrese el PIN de 6 dígitos del paciente</string>
+    <string name="pin_hint">PIN (6 dígitos)</string>
+    <string name="confirm">Confirmar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="pin_error_length">El PIN debe tener 6 dígitos</string>
+    <string name="pin_error_incorrect">PIN incorrecto. Intente nuevamente</string>
+    <string name="pin_error_no_dni">No se encontró el campo DNI en el código QR</string>
+    <string name="pin_error_dni_short">El DNI debe tener al menos 6 dígitos</string>
 </resources>

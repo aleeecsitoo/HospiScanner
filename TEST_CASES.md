@@ -15,6 +15,32 @@ This directory contains sample QR code data in JSON format for testing the Hospi
 }
 ```
 
+### Patient Information with DNI (for PIN verification)
+```json
+{
+  "patient_id": "P-12345",
+  "name": "John Doe",
+  "DNI": "12345678",
+  "bed": "A-101",
+  "status": "admitted",
+  "admission_date": "2026-02-18"
+}
+```
+**Note:** When this QR code is scanned, it will prompt for PIN verification. The PIN is the first 6 digits of the DNI: `123456`
+
+### Patient Information with DNI (alternative format)
+```json
+{
+  "patient_id": "P-67890",
+  "name": "Maria Garcia",
+  "dni": "98765432",
+  "bed": "B-205",
+  "status": "observation",
+  "admission_date": "2026-02-17"
+}
+```
+**Note:** The PIN would be: `987654`
+
 ### Medical Record
 ```json
 {

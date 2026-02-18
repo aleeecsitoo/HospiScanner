@@ -50,17 +50,37 @@
         │              │
    ✓ Valid JSON   ✗ Invalid JSON
         │              │
-        ▼              ▼
-┌───────────────┐  ┌──────────────────┐
-│  Result Screen│  │  Result Screen   │
-│  ✅ Success   │  │  ❌ Error        │
-│               │  │                  │
-│  Raw Data     │  │  Raw Data        │
-│  Parsed JSON  │  │  Error Message   │
-│               │  │                  │
-│  [Copy] [Scan]│  │  [Copy] [Scan]   │
-└───────────────┘  └──────────────────┘
-        │                   │
+        ▼              │
+    Has DNI?           │
+    ┌───┴───┐          │
+    │       │          │
+  Yes      No          │
+    │       │          │
+    ▼       ▼          ▼
+┌──────┐ ┌──────────────────┐
+│ PIN  │ │  Result Screen   │
+│Dialog│ │  ✅ Success      │
+│      │ │                  │
+│Enter │ │  Raw Data        │
+│6-digit│ │  Parsed JSON    │
+│      │ │                  │
+│[Cancel]│ │  [Copy] [Scan]  │
+│[Confirm]│ └──────────────┘
+└──┬───┘ └───────┬──────────┘
+   │             │
+PIN OK│    PIN Cancel
+   │             │
+   ▼             ▼
+┌──────────────────┐
+│  Result Screen   │
+│  ✅ Success      │
+│                  │
+│  Raw Data        │
+│  Parsed JSON     │
+│                  │
+│  [Copy] [Scan]   │
+└───────┬──────────┘
+        │
         └─────────┬─────────┘
                   │
           User clicks "Scan Again"
@@ -88,8 +108,17 @@
 - **Pretty Formatting**: Readable JSON display with indentation
 - **Error Handling**: Clear error messages for invalid JSON
 - **Type Flexibility**: Handles nested objects and arrays
+- **DNI Detection**: Automatically detects DNI/dni field in JSON
 
-### 4. 🎨 UI/UX Design
+### 4. 🔐 PIN Verification
+- **Patient Privacy**: 6-digit PIN verification for patient data
+- **DNI-based PIN**: PIN is first 6 digits of patient's DNI
+- **Popup Dialog**: Clean, focused verification interface
+- **Error Handling**: Clear feedback for incorrect PIN attempts
+- **Flexible Field Names**: Supports DNI, dni, Dni, document_id, documentId
+- **Optional Feature**: Only activates when DNI field is present
+
+### 5. 🎨 UI/UX Design
 
 #### Color Palette
 - **Primary (Blue)**: #2196F3 - Professional, trustworthy
@@ -105,13 +134,13 @@
 - **Smooth Transitions**: Polished user experience
 - **Dark Mode**: Full dark theme support
 
-### 5. 🔐 Permission Management
+### 6. 🔐 Permission Management
 - **Runtime Permissions**: Requests camera permission when needed
 - **Clear Messaging**: Explains why permission is required
 - **Graceful Handling**: User-friendly permission denial flow
 - **Easy Recovery**: Simple button to re-request permission
 
-### 6. 📋 Result Management
+### 7. 📋 Result Management
 - **Dual Display**: Shows both raw and parsed data
 - **Status Indicators**: Color-coded success/error states
 - **Copy Function**: One-tap clipboard copy
@@ -198,7 +227,7 @@ User opens app
     → Camera starts
 ```
 
-### 2. Scanning Flow
+### 2. Scanning Flow (without DNI)
 ```
 Camera preview active
     → User points at QR code
@@ -209,7 +238,22 @@ Camera preview active
     → User views result
 ```
 
-### 3. Copy to Clipboard
+### 3. Scanning Flow (with DNI - PIN verification)
+```
+Camera preview active
+    → User points at QR code with DNI field
+    → ML Kit detects code
+    → ViewModel processes data
+    → Model parses JSON and extracts DNI
+    → PIN dialog appears
+    → User enters 6-digit PIN
+    → PIN validated against first 6 digits of DNI
+    → If correct: Result screen appears
+    → If incorrect: Error message shown, retry
+    → User can cancel to return to scanner
+```
+
+### 4. Copy to Clipboard
 ```
 Result screen displayed
     → User taps "Copy to Clipboard"
@@ -218,7 +262,7 @@ Result screen displayed
     → User can paste in other apps
 ```
 
-### 4. Scan Again
+### 5. Scan Again
 ```
 Result screen displayed
     → User taps "Scan Again"

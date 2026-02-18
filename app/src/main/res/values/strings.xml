@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">HospiScanner</string>
+    
+    <!-- Scanner Screen -->
+    <string name="scanner_title">Scan QR Code</string>
+    <string name="scanner_instruction">Point your camera at a QR code</string>
+    <string name="scanning">Scanning…</string>
+    <string name="camera_permission_required">Camera permission is required to scan QR codes</string>
+    <string name="grant_permission">Grant Permission</string>
+    <string name="permission_denied">Camera permission denied</string>
+    
+    <!-- Result Screen -->
+    <string name="result_title">Scan Result</string>
+    <string name="scan_again">Scan Again</string>
+    <string name="raw_data">Raw Data:</string>
+    <string name="parsed_json">Parsed JSON:</string>
+    <string name="invalid_json">Invalid JSON format</string>
+    <string name="copy_to_clipboard">Copy to Clipboard</string>
+    <string name="copied">Copied to clipboard</string>
+    
+    <!-- Errors -->
+    <string name="error_camera_init">Failed to initialize camera</string>
+    <string name="error_scanning">Error during scanning</string>
+    <string name="error_processing">Error processing QR code</string>
+</resources>
